@@ -11,16 +11,16 @@ pip install -r requirements.txt [update requirements.txt as needed]
 
 ## Training
 ```bash
-python image_captioning/train.py
+python image_caption/train.py
 ```
 ## Inference via scripts
 ```bash
-python image_captioning/predict.py
+python image_caption/predict.py
 ```
 
 ## Endpoints
 ```bash
-uvicorn image_captioning.app:app --host 0.0.0.0 --port 5000 --reload
+uvicorn image_caption.app:app --host 0.0.0.0 --port 5000 --reload
 → http://localhost:5000/docs
 ```
 
@@ -57,16 +57,16 @@ pytest
 ## Docker
 1. Build image
 ```bash
-docker build -t mwml-pytorch-image-captioning:latest -f Dockerfile .
+docker build -t mwml-torch-image-caption:latest -f Dockerfile .
 ```
 2. Run container
 ```bash
-docker run -d -p 5000:5000 -p 6006:6006 --name mwml-pytorch-image-captioning mwml-pytorch-image-captioning:latest
+docker run -d -p 5000:5000 -p 6006:6006 --name mwml-torch-image-caption mwml-torch-image-caption:latest
 ```
 
 ## Directory structure
 ```
-mwml-pytorch-image-captioning/
+mwml-torch-image-caption/
 ├── datasets/                           - datasets
 ├── experiments/                        - experiment directories
 ├── logs/                               - directory of log files
@@ -74,7 +74,7 @@ mwml-pytorch-image-captioning/
 |   └── info/                             - info log
 ├── tensorboard/                        - tensorboard logs
 ├── tests/                              - unit tests
-├── image_captioning/
+├── image_caption/
 |   ├── app.py                            - app endpoints
 |   ├── config.py                         - configuration
 |   ├── data.py                           - data processing
@@ -97,7 +97,7 @@ mwml-pytorch-image-captioning/
 
 ## Overfit to small subset
 ```
-python mwml-pytorch-image-captioning/train.py --overfit
+python mwml-torch-image-caption/train.py --overfit
 ```
 
 ## Experiments
@@ -107,17 +107,17 @@ python mwml-pytorch-image-captioning/train.py --overfit
 ## Helpful docker commands
 • Build image
 ```
-docker build -t mwml-pytorch-image-captioning:latest -f Dockerfile .
+docker build -t mwml-torch-image-caption:latest -f Dockerfile .
 ```
 
 • Run container if using `CMD ["python", "app.py"]` or `ENTRYPOINT [ "/bin/sh", "entrypoint.sh"]`
 ```
-docker run -p 5000:5000 --name mwml-pytorch-image-captioning mwml-pytorch-image-captioning:latest
+docker run -p 5000:5000 --name mwml-torch-image-caption mwml-torch-image-caption:latest
 ```
 
 • Get inside container if using `CMD ["/bin/bash"]`
 ```
-docker run -p 5000:5000 -it mwml-pytorch-image-captioning /bin/bash
+docker run -p 5000:5000 -it mwml-torch-image-caption /bin/bash
 ```
 
 • Other flags
