@@ -123,7 +123,7 @@ def main():
 								criterion=criterion)
 
 		# Check if there was an improvement
-		is is_best = recent_bleu4 > best_bleu4
+		is_best = recent_bleu4 > best_bleu4
 		best_bleu4 = max(recent_bleu4, best_bleu4)
 		if not is_best:
 			epochs_since_improvement += 1
