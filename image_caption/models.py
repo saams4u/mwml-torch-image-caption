@@ -128,7 +128,7 @@ class DecoderWithAttention(nn.Module):
 		num_pixels = encoder_out.size(1)
 
 		# Sort input data by decreasing lengths; why? apparent below
-		caption_lengths, sort_ind = caption_lengths.squeeze(1).sort(dim=0, decreasing=True)
+		caption_lengths, sort_ind = caption_lengths.squeeze(1).sort(dim=0, descending=True)
 		encoder_out = encoder_out[sort_ind]
 		encoded_captions = encoded_captions[sort_ind]
 
@@ -143,14 +143,14 @@ class DecoderWithAttention(nn.Module):
 		decode_lengths = (caption_lengths - 1).tolist()
 
 		# Create tensors to hold word prediction scores and alphas
-		predictions = torch.zeros(batch_size, max(decode_lengths, vocab_size).to(device))
+		predictions = torch.zeros(batch_size, max(decode_lengths), vocab_size).to(device)
 		alphas = torch.zeros(batch_size, max(decode_lengths), num_pixels).to(device)
 
 		# At each time-step, decode by
 		# attention-weighing the encoder's output based on the decoder's previous hidden state output
 		# then generate a new word in the decoder with the previous word and the attention weighted encoding
 		for t in range(max(decode_lengths)):
-			batch_size_t = sum([l > t to l in decode_lengths])
+			batch_size_t = sum([l > t for l in decode_lengths])
 			attention_weighted_encoding, alpha = self.attention(encoder_out[:batch_size_t],
 																h[:batch_size_t])
 			gate = self.sigmoid(self.f_beta(h[:batch_size_t]))  # gating scalar, (batch_size_t, encoder_dim)
@@ -159,7 +159,7 @@ class DecoderWithAttention(nn.Module):
 				torch.cat([embeddings[:batch_size_t, t, :], attention_weighted_encoding], dim=1),
 				(h[:batch_size_t], c[:batch_size_t]))  # (batch_size_t, decoder_dim)
 			preds = self.fc(self.dropout(h))  # (batch_size_t, decoder_dim)
-			predictions[:batch_size_t, t. :] = preds
+			predictions[:batch_size_t, t, :] = preds
 			alphas[:batch_size_t, t, :] = alpha
 
 		return predictions, encoded_captions, decode_lengths, alphas, sort_ind
